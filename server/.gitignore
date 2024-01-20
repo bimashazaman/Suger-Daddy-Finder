@@ -25,3 +25,7 @@ yarn-error.log*
 .env
 
 env
+
+# all kinds of env files
+.env*
+!.env.example
