@@ -22,4 +22,9 @@ userInteractionSchema.index(
   { unique: true }
 );
 
-module.exports = UserInteraction;
+const UserInteraction = mongoose.model(
+  "UserInteraction",
+  userInteractionSchema
+);
+
+export default UserInteraction;

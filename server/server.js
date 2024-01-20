@@ -9,12 +9,8 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import helmet from "helmet";
-
 import authRoutes from "./routes/auth/auth.route.js";
-// import userRoutes from './routes/users.js'
-// import { register } from './controllers/auth.js'
-// import { createPost } from './controllers/posts.js'
-// import { verifyToken } from './middleware/auth.js'
+import userInteractionRoutes from "./routes/users/userInteraction.route.js";
 
 // CONFIGURATIONS
 
@@ -82,18 +78,13 @@ const storage = multer.diskStorage({
 });
 
 // Initializing multer with the defined storage configuration
-const upload = multer({
-  storage,
-});
+// const upload = multer({
+//   storage,
+// });
 
 // ROUTES SETUP
-
-//test route
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.use("/auth", authRoutes);
+app.use("/user-interactions", userInteractionRoutes);
 
 //DATABASE SETUP
 
@@ -107,7 +98,5 @@ mongoose
     // Starting the server on successful database connection
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
     console.log("Connected to MongoDB");
-    // User.insertMany(users)
-    // Post.insertMany(posts)
   })
   .catch((error) => console.log(`${error} did not connect`));

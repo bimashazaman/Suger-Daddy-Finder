@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers.token;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
   if (token) {
-    const accessToken = token.split(" ")[1];
-    jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-        res.status(403).json("Token is not valid!");
+        return res.status(403).json("Token is not valid!");
       }
       req.user = user;
       next();
