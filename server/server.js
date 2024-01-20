@@ -10,16 +10,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import helmet from "helmet";
 
-// import authRoutes from './routes/auth.js'
+import authRoutes from "./routes/auth/auth.route.js";
 // import userRoutes from './routes/users.js'
 // import { register } from './controllers/auth.js'
 // import { createPost } from './controllers/posts.js'
 // import { verifyToken } from './middleware/auth.js'
-
-//for fake data
-// import User from './models/User.js'
-// import Post from './models/Post.js'
-// import { users, posts } from './data/index.js'
 
 // CONFIGURATIONS
 
@@ -92,9 +87,13 @@ const upload = multer({
 });
 
 // ROUTES SETUP
-// app.post('/auth/register', upload.single('picture'), register)
-// app.use('/auth', authRoutes)
-// app.use('/users', userRoutes)
+
+//test route
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.use("/auth", authRoutes);
 
 //DATABASE SETUP
 

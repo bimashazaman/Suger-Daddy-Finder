@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const financialAgreementSchema = new mongoose.Schema({
   sugarDaddyId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
