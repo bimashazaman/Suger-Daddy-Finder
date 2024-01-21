@@ -2,4 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* quicksand */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
+html {
+  font-family: 'Quicksand', sans-serif;
+  
+}
+
+
+.box {
+    --mask: 
+      radial-gradient(75.74px at calc(100% - 105.35px) 50%, #000 99%, #0000 101%) 0 calc(50% - 86px)/100% 172px, 
+      radial-gradient(75.74px at calc(100% + 62.35px) 50%, #0000 99%, #000 101%) calc(100% - 43px) 50%/100% 172px repeat-y;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+  }
