@@ -8,8 +8,9 @@ import {
   Navigate,
 } from "react-router-dom";
 import Login from "./pages/Auth/Login";
-import { useAuthContext } from "./AuthContext";
 import Register from "./pages/Auth/Register";
+import ChooseAccountType from "./pages/Auth/ChooseAccountType";
+import { useSelector } from "react-redux";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/choose-account-type" element={<ChooseAccountType />} />
         <Route path="/" element={<PrivateRoute />} />
       </Routes>
     </Router>
@@ -24,8 +26,7 @@ const App = () => {
 };
 
 const PrivateRoute = () => {
-  const { isLoggedIn } = useAuthContext();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   return isLoggedIn ? <div>Private Route</div> : <Navigate to="/login" />;
 };
-
 export default App;

@@ -1,36 +1,18 @@
-// src/Login.js
-
 import React, { useState } from "react";
-import axios from "axios";
-import { useAuthContext } from "../../AuthContext";
-import { BASE_URL } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   const navigate = useNavigate();
+  const login = useLogin();
 
-  const { login } = useAuthContext();
-
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(`${BASE_URL}/auth/login`, {
-        email,
-        password,
-      });
-      console.log(response.data);
-      // Save the token and update login state
-      if (response.data.token) {
-        login(response.data.token);
-        // Redirect or perform further actions
-        navigate("/");
-      }
-    } catch (error) {
-      setErrorMessage(error.response?.data || "Error occurred");
-    }
+    login(email, password, () => navigate("/"), setErrorMessage);
   };
 
   return (
@@ -47,7 +29,6 @@ const Login = () => {
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center z-10">
         <h1 className=" text-purple-200 text-4xl font-semibold mb-4">Login</h1>
 
-        {/* write something sweet here for the suger daddy dating app */}
         <div className="text-center mb-8 md:w-2/5 w-[80%]">
           <p className="text-gray-400 text-sm">
             Welcome to a world where connections are more than just a swipe
