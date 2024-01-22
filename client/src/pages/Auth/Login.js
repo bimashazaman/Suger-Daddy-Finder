@@ -1,23 +1,44 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
   const login = useLogin();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    login(email, password, () => navigate("/"), setErrorMessage);
-  };
+  // Yup schema for form validation
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+  });
+
+  // Formik hook for form handling
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      login(
+        values.email,
+        values.password,
+        () => navigate("/"),
+        setErrorMessage
+      );
+    },
+  });
 
   return (
     <div className="h-screen flex bg-[#16161b] overflow-hidden">
-      {/* Image Section */}
       <div className="hidden md:block md:w-1/2 h-screen">
         <img
           src={`/assets/images/registerImage.png`}
@@ -36,23 +57,35 @@ const Login = () => {
           </p>
         </div>
 
-        <form onSubmit={handleLogin} className="w-full max-w-md px-4 md:px-0">
+        <form
+          onSubmit={formik.handleSubmit}
+          className="w-full max-w-md px-4 md:px-0"
+        >
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
             placeholder="Email"
-            required
             className="w-full p-3 mb-5 bg-transparent border border-white text-white rounded-full hover:border-[#7F59F0] transition-all duration-200 outline-none focus:border-[#7F59F0] focus:ring-2 focus:ring-[#7F59F0] focus:ring-opacity-50"
           />
+          {formik.touched.email && formik.errors.email ? (
+            <p className="text-red-500 -mt-3 mb-5">{formik.errors.email}</p>
+          ) : null}
+
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
             placeholder="Password"
-            required
             className="w-full p-3 mb-2 bg-transparent border border-white text-white rounded-full hover:border-[#7F59F0] transition-all duration-200 outline-none focus:border-[#7F59F0] focus:ring-2 focus:ring-[#7F59F0] focus:ring-opacity-50"
           />
+          {formik.touched.password && formik.errors.password ? (
+            <p className="text-red-500">{formik.errors.password}</p>
+          ) : null}
           <div className=" text-right text-white mb-5 cursor-pointer hover:text-[#7F59F0] transition-all duration-200 pr-3">
             <p className="text-white  text-sm">
               <span className="text-[#7F59F0] cursor-pointer">

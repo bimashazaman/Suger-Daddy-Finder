@@ -1,27 +1,47 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useRegister from "../../hooks/useRegister";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
   const register = useRegister();
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    register(
-      username,
-      email,
-      password,
-      () => navigate("/choose-account-type"),
-      setErrorMessage
-    );
-  };
+  // Yup schema for form validation
+  const validationSchema = Yup.object({
+    username: Yup.string()
+      .min(3, "Username must be at least 3 characters")
+      .required("Username is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+  });
+
+  // Formik hook for form handling
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      register(
+        values.username,
+        values.email,
+        values.password,
+        () => navigate("/choose-account-type"),
+        setErrorMessage
+      );
+    },
+  });
+
   return (
     <div className="h-screen flex bg-[#16161b] overflow-hidden">
       {/* Image Section */}
@@ -46,33 +66,46 @@ const Register = () => {
         </div>
 
         <form
-          onSubmit={handleRegister}
+          onSubmit={formik.handleSubmit}
           className="w-full max-w-md px-4 md:px-0"
         >
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.username}
             placeholder="Username"
-            required
             className="w-full p-3 mb-5 bg-transparent border border-white text-white rounded-full hover:border-[#7F59F0] transition-all duration-200 outline-none focus:border-[#7F59F0] focus:ring-2 focus:ring-[#7F59F0] focus:ring-opacity-50"
           />
+          {formik.touched.username && formik.errors.username ? (
+            <p className="text-red-500 -mt-3 mb-4">{formik.errors.username}</p>
+          ) : null}
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
             placeholder="Email"
-            required
             className="w-full p-3 mb-5 bg-transparent border border-white text-white rounded-full hover:border-[#7F59F0] transition-all duration-200 outline-none focus:border-[#7F59F0] focus:ring-2 focus:ring-[#7F59F0] focus:ring-opacity-50"
           />
+          {formik.touched.email && formik.errors.email ? (
+            <p className="text-red-500 -mt-3 mb-4">{formik.errors.email}</p>
+          ) : null}
+
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
             placeholder="Password"
-            required
             className="w-full p-3 mb-7 bg-transparent border border-white text-white rounded-full hover:border-[#7F59F0] transition-all duration-200 outline-none focus:border-[#7F59F0] focus:ring-2 focus:ring-[#7F59F0] focus:ring-opacity-50"
           />
+          {formik.touched.password && formik.errors.password ? (
+            <p className="text-red-500 -mt-4 mb-4">{formik.errors.password}</p>
+          ) : null}
 
           <button
             type="submit"
