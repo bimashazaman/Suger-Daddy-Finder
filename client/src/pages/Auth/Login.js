@@ -8,7 +8,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
-  const login = useLogin();
+  const loginHook = useLogin();
 
   // Yup schema for form validation
   const validationSchema = Yup.object({
@@ -28,7 +28,7 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      login(
+      loginHook(
         values.email,
         values.password,
         () => navigate("/"),

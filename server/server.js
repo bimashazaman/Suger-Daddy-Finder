@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import helmet from "helmet";
 import authRoutes from "./routes/auth/auth.route.js";
 import userInteractionRoutes from "./routes/users/userInteraction.route.js";
+import userRoutes from "./routes/users/users.route.js";
 
 // CONFIGURATIONS
 
@@ -85,6 +86,7 @@ const storage = multer.diskStorage({
 // ROUTES SETUP
 app.use("/auth", authRoutes);
 app.use("/user-interactions", userInteractionRoutes);
+app.use("/user", userRoutes);
 
 //DATABASE SETUP
 

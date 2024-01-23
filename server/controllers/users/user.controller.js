@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "../../models/user.model.js";
+import { uploadFile } from "../../utils/uploadFile.js";
 
 const register = async (req, res) => {
   try {
@@ -73,4 +74,70 @@ const login = async (req, res) => {
   }
 };
 
-export default { register, login };
+const updateUser = async (req, res) => {
+  const updates = req.body;
+  const allowedUpdates = [
+    "username",
+    "email",
+    "passwordHash",
+    "profile.age",
+    "profile.gender",
+    "profile.interests",
+    "profile.bio",
+    "profile.photos",
+    "profile.profilePicture",
+    "profile.coverPicture",
+    "accountType",
+    "location.type",
+    "location.coordinates",
+    "preferences",
+    "privacySettings",
+  ];
+
+  const isValidOperation = Object.keys(updates).every((update) =>
+    allowedUpdates.includes(update)
+  );
+
+  if (!isValidOperation) {
+    return res.status(400).json({ error: "Invalid updates!" });
+  }
+
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json("User not found!");
+    }
+
+    // Handle image upload
+    if (req.file) {
+      const result = await uploadFile(req.file);
+      user.profile.profilePicture = result.Location;
+    }
+
+    // Handle other updates
+    Object.keys(updates).forEach((update) => {
+      if (update.includes(".")) {
+        // Handle nested objects
+        const parts = update.split(".");
+        user[parts[0]][parts[1]] = updates[update];
+      } else if (update !== "password" && update !== "profilePicture") {
+        // Exclude password and profilePicture as they are handled separately
+        user[update] = updates[update];
+      }
+    });
+
+    if (updates.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(updates.password, salt);
+      user.passwordHash = hashedPassword;
+    }
+
+    const updatedUser = await user.save();
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json(err);
+    console.error(err.message);
+  }
+};
+
+export default { register, login, updateUser };

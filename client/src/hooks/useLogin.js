@@ -8,20 +8,29 @@ import { BASE_URL } from "../utils/constant";
 const useLogin = () => {
   const dispatch = useDispatch();
 
-  const login = async (email, password, onSuccess, onError) => {
+  const loginHook = async (email, password, onSuccess, onError) => {
     try {
       const response = await axios.post(`${BASE_URL}/auth/login`, {
         email,
         password,
       });
-      dispatch(loginAction(response.data.token));
+
+      dispatch(
+        loginAction({
+          token: response.data.token,
+          user: response.data.user,
+        })
+      );
+
+      console.log("login success");
       onSuccess();
     } catch (error) {
-      onError(error.response?.data || "Error occurred");
+      onError(error.response?.data || "Error occurred during login");
+      console.log(error);
     }
   };
 
-  return login;
+  return loginHook;
 };
 
 export default useLogin;

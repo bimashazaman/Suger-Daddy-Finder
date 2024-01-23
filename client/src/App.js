@@ -11,6 +11,7 @@ import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import ChooseAccountType from "./pages/Auth/ChooseAccountType";
 import { useSelector } from "react-redux";
+import ProfileSettings from "./pages/Auth/ProfileSettings";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/choose-account-type" element={<ChooseAccountType />} />
+        <Route path="/profile-settings" element={<ProfileSettings />} />
         <Route path="/" element={<PrivateRoute />} />
       </Routes>
     </Router>

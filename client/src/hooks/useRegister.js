@@ -15,7 +15,14 @@ const useRegister = () => {
         email,
         password,
       });
-      dispatch(loginAction(response.data.token));
+
+      dispatch(
+        loginAction({
+          token: response.data.token,
+          user: response.data.user,
+        })
+      );
+
       onSuccess();
     } catch (error) {
       onError(error.response?.data || "Error occurred during registration");

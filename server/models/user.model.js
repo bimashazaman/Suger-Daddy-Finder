@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema(
       interests: [String],
       bio: String,
       photos: [String],
+      profilePicture: String,
+      coverPicture: String,
     },
     accountType: { type: String, enum: ["sugarbaby", "sugardaddy"] },
     location: {
