@@ -1,5 +1,4 @@
 // App.js
-
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -10,8 +9,9 @@ import {
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import ChooseAccountType from "./pages/Auth/ChooseAccountType";
-import { useSelector } from "react-redux";
 import ProfileSettings from "./pages/Auth/ProfileSettings";
+import { useSelector } from "react-redux";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
@@ -19,16 +19,25 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/choose-account-type" element={<ChooseAccountType />} />
-        <Route path="/profile-settings" element={<ProfileSettings />} />
-        <Route path="/" element={<PrivateRoute />} />
+
+        {/* These are private routes */}
+        <Route
+          path="/choose-account-type"
+          element={<PrivateRoute component={ChooseAccountType} />}
+        />
+        <Route
+          path="/profile-settings"
+          element={<PrivateRoute component={ProfileSettings} />}
+        />
+        <Route path="/" element={<PrivateRoute component={Home} />} />
       </Routes>
     </Router>
   );
 };
 
-const PrivateRoute = () => {
+const PrivateRoute = ({ component: Component }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  return isLoggedIn ? <div>Private Route</div> : <Navigate to="/login" />;
+  return isLoggedIn ? <Component /> : <Navigate to="/login" />;
 };
+
 export default App;

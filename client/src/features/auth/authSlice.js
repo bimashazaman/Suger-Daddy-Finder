@@ -20,13 +20,17 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+const initialState = {
+  isLoggedIn: !!localStorage.getItem("token"),
+  token: localStorage.getItem("token"),
+  user: localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null,
+};
+
 export const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    isLoggedIn: false,
-    token: null,
-    user: null,
-  },
+  initialState,
   reducers: {
     login: (state, action) => {
       const { token, user } = action.payload;

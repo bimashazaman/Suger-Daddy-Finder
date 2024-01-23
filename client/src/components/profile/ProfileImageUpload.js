@@ -125,6 +125,14 @@ const ProfileImageUpload = () => {
         Upload
       </button>
       {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+
+      {/* skip this step */}
+      <p
+        className="text-white mt-8 cursor-pointer hover:text-[#7F59F0] transition-all duration-200 text-sm"
+        onClick={() => navigate("/")}
+      >
+        Skip this step
+      </p>
     </div>
   );
 };
