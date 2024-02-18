@@ -64,25 +64,6 @@ app.use(cors());
 // Serving static files from the 'public/assets' directory
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
-// FILE STORAGE
-
-// Configuring multer for file storage
-const storage = multer.diskStorage({
-  // Setting destination for storing files
-  destination: function (req, file, cb) {
-    cb(null, "public/assets");
-  },
-  // Configuring filenames of stored files
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
-// Initializing multer with the defined storage configuration
-// const upload = multer({
-//   storage,
-// });
-
 // ROUTES SETUP
 app.use("/auth", authRoutes);
 app.use("/user-interactions", userInteractionRoutes);

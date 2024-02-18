@@ -3,12 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useLogin from "../../hooks/useLogin";
+import { useSelector } from "react-redux";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
   const loginHook = useLogin();
+
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   // Yup schema for form validation
   const validationSchema = Yup.object({
@@ -20,6 +23,19 @@ const Login = () => {
       .required("Password is required"),
   });
 
+  // check if the user is logged in
+  if (isLoggedIn) {
+    //if the user account type is sugar daddy, navigate to /daddies else navigate to /babies
+    if (localStorage.getItem("user")) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user.accountType === "sugar-daddy") {
+        navigate("/daddies");
+      } else {
+        navigate("/babies");
+      }
+    }
+  }
+
   // Formik hook for form handling
   const formik = useFormik({
     initialValues: {
@@ -28,12 +44,7 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      loginHook(
-        values.email,
-        values.password,
-        () => navigate("/"),
-        setErrorMessage
-      );
+      loginHook(values.email, values.password, navigate, setErrorMessage);
     },
   });
 

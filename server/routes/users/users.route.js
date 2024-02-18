@@ -14,4 +14,9 @@ router.put(
   UserController.updateUser
 );
 
+router.get("/get/:id", UserController.getUser);
+router.get("/sugardaddy", UserController.getSugarDaddy);
+router.get("/sugarbaby", UserController.getSugarBaby);
+router.get("/all", UserController.getAllUsers);
+
 export default router;

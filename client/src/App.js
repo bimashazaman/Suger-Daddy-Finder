@@ -11,7 +11,8 @@ import Register from "./pages/Auth/Register";
 import ChooseAccountType from "./pages/Auth/ChooseAccountType";
 import ProfileSettings from "./pages/Auth/ProfileSettings";
 import { useSelector } from "react-redux";
-import Home from "./pages/Home";
+import Home from "./pages/SugarDaddy/Home";
+import BabyHome from "./pages/SugarBaby/BabyHome";
 
 const App = () => {
   return (
@@ -29,7 +30,13 @@ const App = () => {
           path="/profile-settings"
           element={<PrivateRoute component={ProfileSettings} />}
         />
-        <Route path="/" element={<PrivateRoute component={Home} />} />
+        {/* the daddy will see /babies */}
+        <Route path="/babies" element={<PrivateRoute component={Home} />} />
+        {/* the baby will see /daddies */}
+        <Route
+          path="/daddies"
+          element={<PrivateRoute component={BabyHome} />}
+        />
       </Routes>
     </Router>
   );

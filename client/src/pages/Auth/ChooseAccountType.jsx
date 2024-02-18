@@ -26,8 +26,12 @@ const ChooseAccountType = () => {
     // Dispatch the updateUser action
     dispatch(updateUser({ userId: userId, updates: updates }));
 
-    // Redirect to home page
-    navigate("/profile-settings");
+    // if the user account type is sugar daddy, navigate to /daddies else navigate to /babies
+    if (accountType === "sugardaddy") {
+      navigate("/daddies");
+    } else {
+      navigate("/babies");
+    }
   };
   return (
     <div className="h-screen flex bg-[#16161b] overflow-hidden">

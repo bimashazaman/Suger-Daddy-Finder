@@ -140,4 +140,54 @@ const updateUser = async (req, res) => {
   }
 };
 
-export default { register, login, updateUser };
+const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json("User not found!");
+    }
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+//get sugardaddy
+const getSugarDaddy = async (req, res) => {
+  try {
+    const sugarDaddies = await User.find({ accountType: "sugardaddy" });
+    res.status(200).json(sugarDaddies);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+//get sugarbaby
+const getSugarBaby = async (req, res) => {
+  try {
+    const sugarBabies = await User.find({ accountType: "sugarbaby" });
+    res.status(200).json(sugarBabies);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+//get all users
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export default {
+  register,
+  login,
+  updateUser,
+  getUser,
+  getSugarDaddy,
+  getSugarBaby,
+  getAllUsers,
+};
